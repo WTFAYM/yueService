@@ -1,0 +1,13 @@
+let BaseService = require('../base/BaseService');
+let Condition = require('../utils/Condition');
+
+let <%= daoName %> = refDaos('<%= daoName %>');
+
+class <%= moduleName %>Service extends BaseService {
+
+    constructor() {
+        super('<%= daoName %>');
+    }
+}
+
+module.exports = <%= moduleName %>Service;

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+<div class="container">
+    <div>
+        <input id="username" type="text" name="username">
+        <input id="password" type="password" name="password">
+        <input type="button" onclick="submit()" value="登录">
+    </div>
+</div>
+<script src="/js/jquery-3.3.1.min.js"></script>
+<script src="/js/utils.js"></script>
+<script>
+    function submit() {
+        post('/user/login', {username: $("#username").val(), password: $("#password").val()}, function (data) {
+            alert('登录成功！');
+            location = '/user/list.html';
+        });
+    }
+</script>
+</body>
+</html>

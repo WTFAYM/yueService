@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UserList</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 2px 8px;
+            font-weight: 400;
+        }
+        .bar {
+            list-style: none;
+            margin: 10px 0;
+            padding: 0;
+        }
+        .bar li {
+            float: left;
+            padding: 0 10px;
+        }
+    </style>
+</head>
+<body>
+<a href="/user/add.html">添加用户</a>
+<table>
+    <thead>
+    <th>用户名</th>
+    <th>昵称</th>
+    <th>创建时间</th>
+    <th>是否启用</th>
+    <th>操作</th>
+    </thead>
+    <tbody id="userList">
+
+    </tbody>
+</table>
+<ul class="bar">
+    <li>总记录数：<span id="recordCount"></span></li>
+    <li>当前页数：<span id="pageNum"></span></li>
+    <li>总页数：<span id="pageCount"></span></li>
+</ul>
+<hr>
+
+</body>
+<script src='/js/jquery-3.3.1.min.js'></script>
+<script src="/js/utils.js"></script>
+<script>
+    String.prototype.replaceAll = function (searchValue, replaceValue) {
+        return this.replace(new RegExp(searchValue, "gm"), replaceValue);
+    };
+    String.prototype.processTemplate = function (json) {
+        var template = this;
+        for (var i in json) {
+            template = template.replaceAll("{" + i + "}", json[i]);
+        }
+        return template;
+    };
+</script>
+<script>
+    load();
+
+    var template = '<tr>' +
+        '<td>{username}</td>' +
+        '<td>{nickname}</td>' +
+        '<td>{create_date}</td>' +
+        '<td>{enable}</td>' +
+        '<td><a href="javascript:toEdit(\'{id}\')">编辑</a> <a href="javascript:deleteById(\'{id}\')">删除</a></td>' +
+        '</tr>';
+
+
+    function load(params) {
+        get('/user/list', params, function (data) {
+            $('#recordCount').html(data.recordCount);
+            $('#pageNum').html(data.pageNum);
+            $('#pageCount').html(data.pageCount);
+            var html = '';
+            $.each(data.data, function () {
+                html += template.processTemplate(this);
+            });
+            $('#userList').html(html);
+        });
+    }
+
+    function deleteById(id){
+        post('/user/delete', {id: id}, function () {
+            alert('删除成功！');
+            load();
+        })
+    }
+
+</script>
+</html>

@@ -1,0 +1,8 @@
+let BaseDao = require('../base/BaseDao');
+
+class <%= moduleName %>Dao extends BaseDao {
+    constructor(){
+        super({tableName: '<%= tableName %>'});
+    }
+}
+module.exports = <%= moduleName %>Dao;

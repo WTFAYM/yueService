@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>add</title>
+    <style>
+        .form-item {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .form-item .name {
+            display: inline-block;
+            width: 80px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+<form id="form" onsubmit="return submitForm()">
+    <label class="form-item">
+        <span class="name">用户名：</span><input type="text" name="username" required>
+    </label>
+    <label class="form-item">
+        <span class="name">密码：</span><input type="text" name="password" required>
+    </label>
+    <label class="form-item">
+        <span class="name">昵称：</span><input type="text" name="nickname" required>
+    </label>
+    <label class="form-item">
+        <span class="name">是否启用：</span>
+        <label><input type="radio" name="enable" value="1" required>是</label>
+        <label><input type="radio" name="enable" value="0" required>否</label>
+    </label>
+    <input type="submit">
+</form>
+<script src='/js/jquery-3.3.1.min.js'></script>
+<script src="/js/utils.js"></script>
+<script>
+    function array2json(array) {
+        var json = {};
+        $.each(array, function(){
+            json[this.name] = this.value;
+        });
+        return json;
+    }
+
+    function submitForm() {
+        post('/user/add', array2json($('#form').serializeArray()), function () {
+            alert('添加成功！');
+            location = '/user/list.html';
+        });
+        return false
+    }
+</script>
+</body>
+</html>
