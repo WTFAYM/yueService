@@ -10,6 +10,20 @@ class AdminController extends BaseController {
         super();
     }
 
+    async login(req, res) {
+        let admin = await adminService.checkAdmin(super.param(req, 'username'), super.param(req, 'password'));
+        if (admin) {
+            if (admin.enable === '0') {
+                super.fail(res, '已被禁用');
+            }else{
+                req.session.admin = admin;
+                super.success(res,JsonUtils.propertyFilter(admin, ['pwd']));
+            }
+        } else {
+            super.fail(res, '用户名或密码错误！');
+        }
+    }
+
 }
 
 module.exports = new AdminController();

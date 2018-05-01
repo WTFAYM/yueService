@@ -59,6 +59,15 @@ class BaseService {
     }
 
     /**
+     * 根据Id批量删除记录
+     * @param id
+     * @returns {Promise.<*>}
+     */
+    async deleteBatch(ids) {
+        return await this.dao.deleteBatch(ids);
+    }
+
+    /**
      * update by pk
      * @param data
      * @returns {Promise.<*>}

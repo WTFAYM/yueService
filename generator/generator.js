@@ -50,4 +50,4 @@ function generate(moduleName, tableName){
     generateRoute(moduleName);
 }
 
-generate('Tree', 'tree');
+generate('ActUser', 'act_user');

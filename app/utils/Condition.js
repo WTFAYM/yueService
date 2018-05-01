@@ -16,6 +16,7 @@ class Is {
     constructor(field, operator, value) {
         [this.field, this.value, this.operator] = [field, value, operator];
     }
+
     toSql() {
         return `${this.field} ${this.operator} ${this.value}`;
     }
@@ -38,6 +39,7 @@ class Between {
         return [this.min, this.max];
     }
 }
+
 class In {
     constructor(field, values) {
         [this.field, this.values] = [field, values];
@@ -52,7 +54,7 @@ class In {
     }
 }
 
-METHODS = ['like', 'eq', 'gt', 'lt' , 'ge', 'le', 'rLike', 'lLike'];
+METHODS = ['like', 'eq', 'gt', 'lt', 'ge', 'le', 'rlike', 'llike'];
 
 class Condition {
     constructor() {
@@ -90,12 +92,12 @@ class Condition {
         return this;
     }
 
-    lLike(field, value) {
+    llike(field, value) {
         this._conditionObjs.push(new OneParam(field, 'like', `%${value}`));
         return this;
     }
 
-    rLike(field, value) {
+    rlike(field, value) {
         this._conditionObjs.push(new OneParam(field, 'like', `${value}%`));
         return this;
     }
@@ -187,14 +189,28 @@ class Condition {
      * @returns {*}
      */
     static fromParams(params) {
+        console.log(params)
         let condition = Condition.create();
-        for (let key in params) {
-            if (params.hasOwnProperty(key) && key.indexOf("_") > 0){
-                let i = key.lastIndexOf("_");
-                let name = key.substr(0, i);
-                let method = key.substr(i + 1);
-                if (METHODS.indexOf(method) >= 0)
-                    condition[method](name, params[key]);
+        if (params.hasOwnProperty('conditions')) {
+            let cs = params.conditions;
+            for (let key in cs) {
+                if (cs.hasOwnProperty(key) && key.indexOf("_") > 0) {
+                    let i = key.lastIndexOf("_");
+                    let name = key.substr(0, i);
+                    let method = key.substr(i + 1);
+                    if (METHODS.indexOf(method) >= 0)
+                        condition[method](name, cs[key]);
+                }
+            }
+        }
+        if (params.hasOwnProperty('orders')) {
+            let orderbys = params.orders;
+            if (orderbys !== null) {
+                for (let key in orderbys) {
+                    if (orderbys.hasOwnProperty(key)) {
+                        condition.orderBy(key, 'desc' === orderbys[key]);
+                    }
+                }
             }
         }
         return condition;

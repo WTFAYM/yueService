@@ -8,6 +8,11 @@ class TreeService extends BaseService {
     constructor() {
         super('treeDao');
     }
+
+    async addTree(data) {
+        data.ctime = new Date();
+        return await treeDao.insert(data);
+    }
 }
 
 module.exports = TreeService;

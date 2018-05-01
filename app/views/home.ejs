@@ -17,7 +17,7 @@
 <script src="/js/utils.js"></script>
 <script>
     function submit() {
-        post('/user/login', {username: $("#username").val(), password: $("#password").val()}, function (data) {
+        post('/admin/login', {username: $("#username").val(), password: $("#password").val()}, function (data) {
             alert('登录成功！');
         });
     }

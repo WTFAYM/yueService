@@ -8,7 +8,7 @@ let session = require('express-session');
 let beanRegistry = require('../utils/beanRegistry');
 let setting = require('./setting');
 let exceptionResolver = require('../middlewares/ExceptionResolver');
-let LoginChecker = require('../app/middlewares/LoginChecker');
+// let LoginChecker = require('../app/middlewares/LoginChecker');
 
 module.exports = function () {
 
@@ -50,7 +50,7 @@ module.exports = function () {
     //Use the public folder for static files
     app.use(express.static('./public'));
 
-    app.use(LoginChecker);
+    // app.use(LoginChecker);
 
     // discover and register dao
     beanRegistry('app/daos', 'daos');

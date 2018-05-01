@@ -121,7 +121,7 @@ class BaseDao {
 
         // id
         let setID = null;
-        if (!this.autoPK){
+        if (!this.autoPK) {
             if (!obj[this.primaryKey]) {
                 obj[this.primaryKey] = iDGenerator();
             }
@@ -166,6 +166,14 @@ class BaseDao {
         let sql = `delete from ${this.tableName} where ${this.primaryKey} = ?`;
         return this.update(sql, id, null, connection);
     }
+
+    deleteBatch(ids, connection) {
+        if (ids === null || ids.length === 0) return Promise.resolve();
+        let sql = `delete from ${this.tableName} where ${this.primaryKey} in (${ids.join(',')})`;
+        return this.update(sql, ids, null, connection);
+    }
+
+
 
     insertOrUpdate(data, connection) {
         if (data.hasOwnProperty(this.primaryKey) && data[this.primaryKey]) {

@@ -11,9 +11,19 @@ class UserService extends BaseService {
         super('userDao');
     }
 
-    async checkUser(username, password) {
+    async checkUser(phone, password) {
         password = md5(password);
-        let condition = Condition.create().eq('username', username).eq('password', password);
+        let condition = Condition.create().eq('phone', phone).eq('password', password);
+        let res = await userDao.selectList(condition);
+        if (res.length > 0) {
+            return res[0];
+        } else {
+            return null;
+        }
+    }
+
+    async getByPhone(phone) {
+        let condition = Condition.create().eq('phone', phone);
         let res = await userDao.selectList(condition);
         if (res.length > 0) {
             return res[0];
@@ -23,14 +33,17 @@ class UserService extends BaseService {
     }
 
     async addUser(data) {
-        let condition = Condition.create().eq('username', data.username);
+        let condition = Condition.create().eq('phone', data.phone);
         if (userDao.count(condition) > 0) {
             return false;
         }
-
+        data.ussername = data.phone;
+        data.gender = 0;
+        data.birthday = new Date();
         data.password = md5(data.password);
-        data.del_flag = '0';
-        data.create_date = new Date();
+        data.avatar = "http://139.199.188.40/img/01.jpg";
+        data.summary = "这个人很懒，什么都没有说";
+        data.state = 0;
         return await userDao.insert(data);
     }
 
